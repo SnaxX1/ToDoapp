@@ -9,6 +9,17 @@ services:
       timeout: 3s
       retries: 10
 
+  data-migration:
+    build: ./scripts
+    profiles: ["migration"]
+    environment:
+      LEGACY_MONGO_URI: ${LEGACY_MONGO_URI:-mongodb://mongo:27017/todolist}
+      USERS_MONGO_URI: ${USERS_MONGO_URI:-mongodb://mongo:27017/users}
+      TASKS_MONGO_URI: ${TASKS_MONGO_URI:-mongodb://mongo:27017/tasks}
+    depends_on:
+      mongo:
+        condition: service_healthy
+
   auth-service:
     build: ./services/auth-service
     ports:
