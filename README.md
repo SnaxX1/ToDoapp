@@ -11,8 +11,8 @@ A small example with an API gateway and two independent services.
 
 ## Run
 
-Run `docker compose up --build`, then use `http://localhost:8080/api/users/login`
-or `http://localhost:8080/api/tasks`.
+Copy `.env.example` to `.env`, then run `docker compose up --build`. Use
+`http://localhost:8080/api/users/login` or `http://localhost:8080/api/tasks`.
 
 The service responses are examples only: they use no database and do not
 implement real authentication or persistent task storage.

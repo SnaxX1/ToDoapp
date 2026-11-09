@@ -10,8 +10,8 @@ services:
     ports:
       - "8080:8080"
     environment:
-      AUTH_SERVICE_URL: http://auth-service:5001
-      TASK_SERVICE_URL: http://task-service:5002
+      AUTH_SERVICE_URL: ${AUTH_SERVICE_URL}
+      TASK_SERVICE_URL: ${TASK_SERVICE_URL}
     depends_on:
       - auth-service
       - task-service
