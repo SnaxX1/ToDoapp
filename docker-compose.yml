@@ -1,17 +1,56 @@
 services:
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   auth-service:
     build: ./services/auth-service
+    ports:
+      - "5001:5001"
+    environment:
+      MONGO_URI: ${USERS_MONGO_URI:-mongodb://mongo:27017/users}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    depends_on:
+      mongo:
+        condition: service_healthy
 
   task-service:
     build: ./services/task-service
+    ports:
+      - "5002:5002"
+    environment:
+      MONGO_URI: ${TASKS_MONGO_URI:-mongodb://mongo:27017/tasks}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    depends_on:
+      mongo:
+        condition: service_healthy
 
   gateway:
     build: ./gateway
     ports:
-      - "8080:8080"
+      - "5000:5000"
     environment:
-      AUTH_SERVICE_URL: ${AUTH_SERVICE_URL}
-      TASK_SERVICE_URL: ${TASK_SERVICE_URL}
+      AUTH_SERVICE_URL: ${AUTH_SERVICE_URL:-http://auth-service:5001}
+      TASK_SERVICE_URL: ${TASK_SERVICE_URL:-http://task-service:5002}
     depends_on:
       - auth-service
       - task-service
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5000/api}
+      HOST: 0.0.0.0
+    depends_on:
+      - gateway
+
+volumes:
+  mongo_data:

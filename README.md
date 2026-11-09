@@ -1,18 +1,9 @@
-# ToDo App - Microservice Example
+# ToDo App - Microservices Example
 
-A small example with an API gateway and two independent services.
+- `gateway/`: single API entry point on port 5000.
+- `services/auth-service/`: users and authentication on port 5001; MongoDB database `users`.
+- `services/task-service/`: tasks on port 5002; MongoDB database `tasks`.
+- `frontend/`: existing React app, served on port 3000.
 
-## Structure
-
-- `gateway/` forwards API requests to the services.
-- `services/auth-service/` provides example login and registration endpoints.
-- `services/task-service/` provides example task endpoints.
-- `docker-compose.yml` starts the three containers.
-
-## Run
-
-Copy `.env.example` to `.env`, then run `docker compose up --build`. Use
-`http://localhost:8080/api/users/login` or `http://localhost:8080/api/tasks`.
-
-The service responses are examples only: they use no database and do not
-implement real authentication or persistent task storage.
+Copy `.env.example` to `.env`, then run `docker compose up --build`.
+Open `http://localhost:3000`; the frontend calls the gateway at port 5000.
