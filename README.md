@@ -1,18 +1,18 @@
 # ToDo App - Microservice Example
 
-This project is a simple example of a microservice architecture.
+A small example with an API gateway and two independent services.
 
 ## Structure
 
-- `gateway/` : API gateway for external requests
-- `services/auth-service/` : user authentication service
-- `services/task-service/` : task management service
-- `docker-compose.yml` : runs all services together
+- `gateway/` forwards API requests to the services.
+- `services/auth-service/` provides example login and registration endpoints.
+- `services/task-service/` provides example task endpoints.
+- `docker-compose.yml` starts the three containers.
 
-## Services
+## Run
 
-- `gateway` exposes the app to clients
-- `auth-service` handles login/register
-- `task-service` handles task CRUD
+Run `docker compose up --build`, then use `http://localhost:8080/api/users/login`
+or `http://localhost:8080/api/tasks`.
 
-This is only an example architecture, not a production-ready system.
+The service responses are examples only: they use no database and do not
+implement real authentication or persistent task storage.
